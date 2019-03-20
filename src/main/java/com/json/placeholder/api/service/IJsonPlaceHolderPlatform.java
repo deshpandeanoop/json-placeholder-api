@@ -2,6 +2,7 @@ package com.json.placeholder.api.service;
 
 
 import com.json.placeholder.api.dto.request.TaskRequestDTO;
+import com.json.placeholder.api.dto.request.UserRequestDTO;
 import com.json.placeholder.api.dto.response.TaskResponseDTO;
 import com.json.placeholder.api.dto.response.UserResponseDTO;
 /**
@@ -13,4 +14,5 @@ public interface IJsonPlaceHolderPlatform {
 	public UserResponseDTO getUsers();
 	public UserResponseDTO getUserById(int id);
 	public TaskResponseDTO getUserTasks(TaskRequestDTO taskRequestDTO);
+	public UserResponseDTO saveUsers(UserRequestDTO userRequestDTO);
 }

@@ -1,5 +1,8 @@
 package com.json.placeholder.api.model;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -7,12 +10,13 @@ import javax.persistence.OneToOne;
 @Entity
 public class Address {
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int id;
 	private String street;
 	private String suite;
 	private String city;
 	private String zipcode;
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="location_id")
 	private Location geo;
 	public int getId() {

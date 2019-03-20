@@ -1,11 +1,13 @@
 package com.json.placeholder.api.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.json.placeholder.api.builder.JsonPlaceHolderRequestBuilder;
+import com.json.placeholder.api.dto.request.UserRequestDTO;
 import com.json.placeholder.api.dto.response.TaskResponseDTO;
 import com.json.placeholder.api.dto.response.UserResponseDTO;
 import com.json.placeholder.api.service.IJsonPlaceHolderPlatform;
@@ -15,7 +17,7 @@ public class JsonPlaceHolderController {
 	@Autowired
 	private IJsonPlaceHolderPlatform jsonPlaceHolderPlatform;
 
-	@GetMapping("/users")
+	@GetMapping("/users")	
 	public UserResponseDTO getUsers() {
 		return jsonPlaceHolderPlatform.getUsers();
 	}
@@ -35,5 +37,11 @@ public class JsonPlaceHolderController {
 		return jsonPlaceHolderPlatform.getUserTasks(
 				JsonPlaceHolderRequestBuilder.buildTaskResquestDTO(userId, 0)
 				);
+	}
+	
+	@PostMapping("/users")
+	public UserResponseDTO saveUsers(@RequestBody UserRequestDTO userRequestDTO) {
+		System.out.println("Deshpande Anoop");
+		return jsonPlaceHolderPlatform.saveUsers(userRequestDTO);
 	}
 }

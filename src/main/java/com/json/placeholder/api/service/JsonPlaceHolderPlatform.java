@@ -13,11 +13,12 @@ import org.springframework.web.client.RestTemplate;
 
 import com.json.placeholder.api.builder.JsonPlaceHolderResponseBuilder;
 import com.json.placeholder.api.dto.request.TaskRequestDTO;
+import com.json.placeholder.api.dto.request.UserRequestDTO;
 import com.json.placeholder.api.dto.response.TaskResponseDTO;
 import com.json.placeholder.api.dto.response.UserResponseDTO;
-import com.json.placeholder.api.model.Task;
 import com.json.placeholder.api.model.Temp1;
 import com.json.placeholder.api.model.User;
+import com.json.placeholder.api.repository.IUserRepository;
 
 @Service
 public class JsonPlaceHolderPlatform implements IJsonPlaceHolderPlatform{
@@ -26,6 +27,9 @@ public class JsonPlaceHolderPlatform implements IJsonPlaceHolderPlatform{
 	@Autowired
 	@Qualifier("userListParameterizedTypeReference")
 	private ParameterizedTypeReference<List<User>> userParameterizedTypeReference;
+	@Autowired
+	private IUserRepository userRepository;
+	
 	@Override
 	public UserResponseDTO getUsers() {
 		return JsonPlaceHolderResponseBuilder.buildUserResponseResponseDTO(
@@ -39,6 +43,12 @@ public class JsonPlaceHolderPlatform implements IJsonPlaceHolderPlatform{
 						"https://jsonplaceholder.typicode.com/users/"+id, User.class)));
 	}
 	
+	@Override
+	public UserResponseDTO saveUsers(UserRequestDTO userRequestDTO) {
+		return JsonPlaceHolderResponseBuilder
+				.buildUserResponseResponseDTO(userRepository.saveAll(userRequestDTO.getUsers()));
+	}
+	
 	private <T> List<T> getResponseListFromRemoteAPI(final String url,ParameterizedTypeReference<List<T>> parameterizeReference){
 		ResponseEntity<List<T>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null,parameterizeReference);
 		return responseEntity.getBody();
@@ -50,8 +60,11 @@ public class JsonPlaceHolderPlatform implements IJsonPlaceHolderPlatform{
 
 	@Override
 	public TaskResponseDTO getUserTasks(TaskRequestDTO taskRequestDTO) {
-		ResponseEntity<List<Temp1>> responseEntity = restTemplate.exchange("https://jsonplaceholder.typicode.com/users/"+taskRequestDTO.getUserId()+"/todos", HttpMethod.GET, null, new ParameterizedTypeReference<List<Temp1>>() {
-		});
+		ResponseEntity<List<Temp1>> responseEntity = restTemplate.exchange(
+				"https://jsonplaceholder.typicode.com/users/" + taskRequestDTO.getUserId() + "/todos", HttpMethod.GET,
+				null, new ParameterizedTypeReference<List<Temp1>>() {
+				});
 		return JsonPlaceHolderResponseBuilder.buildTaskResponseDTO(responseEntity.getBody());
 	}
+
 }

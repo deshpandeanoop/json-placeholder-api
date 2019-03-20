@@ -2,27 +2,33 @@ package com.json.placeholder.api.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
 import javax.persistence.OneToOne;
-@Entity
+@Entity(name="juser")
 public class User {
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private int id;
 	private String name;
 	private String username;
 	private String email;
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="address_id")
 	private Address address;
 	private String phone;
 	private String website;
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="company_id")
 	private Company company;
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
 	@JoinColumn(name="task_id")
 	private List<Task> tasks;
 	public int getId() {
