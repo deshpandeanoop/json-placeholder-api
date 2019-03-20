@@ -11,5 +11,6 @@ import com.json.placeholder.api.dto.response.UserResponseDTO;
  */
 public interface IJsonPlaceHolderPlatform {
 	public UserResponseDTO getUsers();
-	public TaskResponseDTO getTask(TaskRequestDTO taskRequestDTO);
+	public UserResponseDTO getUserById(int id);
+	public TaskResponseDTO getUserTasks(TaskRequestDTO taskRequestDTO);
 }
