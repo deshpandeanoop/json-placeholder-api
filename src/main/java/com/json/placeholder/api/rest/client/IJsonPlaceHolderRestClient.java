@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
 
-public interface IJsonPlaceHolderRestClient<T> {
-	public List<T> queryForList(String url,ParameterizedTypeReference<T> parameterizeTypeReference);
-	public T queryForObject(String url, Class<T> classType);
+public interface IJsonPlaceHolderRestClient {
+	public<T> List<T> queryForList(String url,ParameterizedTypeReference<List<T>> parameterizeTypeReference);
+	public <T>T queryForObject(String url, Class<T> classType);
 }
