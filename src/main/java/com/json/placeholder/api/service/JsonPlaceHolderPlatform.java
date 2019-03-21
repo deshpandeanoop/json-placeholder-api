@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 
+import com.json.placeholder.api.builder.JsonPlaceHolderRemoteAPIUrlBuilder;
 import com.json.placeholder.api.builder.JsonPlaceHolderResponseBuilder;
 import com.json.placeholder.api.dto.request.TaskRequestDTO;
 import com.json.placeholder.api.dto.request.UserRequestDTO;
@@ -24,20 +25,23 @@ public class JsonPlaceHolderPlatform implements IJsonPlaceHolderPlatform{
 	@Autowired @Qualifier("userListParameterizedTypeReference")
 	private ParameterizedTypeReference<List<User>> userParameterizedTypeReference;
 	
-	/* Makes Rest Call synchronously*/
+	/*Makes Rest Call synchronously*/
 	@Autowired @Qualifier("sync")
 	private IJsonPlaceHolderRestClient jsonPlaceHolderRestClient;
 	
 	@Autowired
 	private IUserRepository userRepository;
+	
+	@Autowired
+	private JsonPlaceHolderRemoteAPIUrlBuilder jsonPlaceHolderRemoteAPIUrlBuilder;
 	/**
-	 * Fetches data from remote API, database, and forms response by concatinating two listss
+	 * Fetches data from remote API, database, and forms response by concatenating two lists
 	 */
 	@Override
 	public UserResponseDTO getUsers() {
 		List<User> users = new ArrayList<>();
 		users.addAll(userRepository.findAll());
-		users.addAll(jsonPlaceHolderRestClient.queryForList("https://jsonplaceholder.typicode.com/users",
+		users.addAll(jsonPlaceHolderRestClient.queryForList(jsonPlaceHolderRemoteAPIUrlBuilder.getUsersAPIUrl(),
 				userParameterizedTypeReference));
 		return JsonPlaceHolderResponseBuilder.buildUserResponseResponseDTO(users);
 	}
@@ -51,7 +55,7 @@ public class JsonPlaceHolderPlatform implements IJsonPlaceHolderPlatform{
 		if (null == user) {
 			return JsonPlaceHolderResponseBuilder
 					.buildUserResponseResponseDTO(Collections.singletonList(jsonPlaceHolderRestClient
-							.queryForObject("https://jsonplaceholder.typicode.com/users/" + id, User.class)));
+							.queryForObject(jsonPlaceHolderRemoteAPIUrlBuilder.getUsersByIdAPIUrl(id), User.class)));
 		}
 		return JsonPlaceHolderResponseBuilder.buildUserResponseResponseDTO(Collections.singletonList(user));
 	}
